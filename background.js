@@ -1,6 +1,7 @@
 /* 
   Copyright 2020. Jefferson "jscher2000" Scher. License: MPL-2.0.
   v0.5 - initial design
+  v0.5.1 - updated icons
 */
 
 let nowlistening; // used for toggling on and off
@@ -70,14 +71,14 @@ function setButton(){
 	if (nowlistening){
 		browser.browserAction.setIcon({
 			path: {
-				"128": "icons/dont-accept-webp.png"
+				"128": "icons/dont-accept-webp2.png"
 			}
 		});
 		browser.browserAction.setTitle({title: 'Turn Don\'t accept webP OFF'});
 	} else {
 		browser.browserAction.setIcon({
 			path: {
-				"128": "icons/do-accept-webp.png"
+				"128": "icons/do-accept-webp2.png"
 			}
 		});
 		browser.browserAction.setTitle({title: 'Turn Don\'t accept webP ON'});
