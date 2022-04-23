@@ -1,9 +1,10 @@
 /* 
-  Copyright 2021. Jefferson "jscher2000" Scher. License: MPL-2.0.
+  Copyright 2022. Jefferson "jscher2000" Scher. License: MPL-2.0.
   v0.5 - initial design
   v0.5.1 - updated icons
   v0.6 - pesky commas...
   v0.7 - new menu; option to also not accept AVIF
+  v0.8 - ability to exempt a site and embedded/linked files
 */
 
 let nowlistening; // used for toggling listener
@@ -14,6 +15,10 @@ let nowlistening; // used for toggling listener
 var oPrefs = {
 	toBlock: [
 		"image/webp"
+	],
+	exemptSites: [
+		"www.patreon.com", 
+		"patreon.com"
 	]
 }
 
@@ -34,6 +39,17 @@ browser.storage.local.get("prefs").then( (results) => {
 /**** Clean Accept Headers of Intercepted Requests ****/
 
 function cleanAccept(details) { 
+	// v0.8 exit for hostnames on the exemptSites list [FUTURE VERSION: allow partial matches?]
+	if (oPrefs.exemptSites.length > 0){
+		var reqUrl = new URL(details.url);
+		if (oPrefs.exemptSites.includes(reqUrl.hostname)) return { requestHeaders: details.requestHeaders };
+		if (details.documentUrl != null && details.documentUrl != undefined){
+			var docUrl = new URL(details.documentUrl);
+			if (oPrefs.exemptSites.includes(docUrl.hostname)) return { requestHeaders: details.requestHeaders };
+		} 
+		var origUrl = new URL(details.originUrl);
+		if (oPrefs.exemptSites.includes(origUrl.hostname)) return { requestHeaders: details.requestHeaders };
+	}
 	// examine and modify the Accept header if present
 	for (let header of details.requestHeaders) {
 		if (header.name.toLowerCase() === 'accept'){

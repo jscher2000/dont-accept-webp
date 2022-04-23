@@ -1,6 +1,7 @@
 /* 
-  Copyright 2021. Jefferson "jscher2000" Scher. License: MPL-2.0.
+  Copyright 2022. Jefferson "jscher2000" Scher. License: MPL-2.0.
   v0.7 - new menu; option to also not accept AVIF
+  v0.8 - ability to exempt a site and embedded/linked media
 */
 
 /**** Menu Setup ****/
@@ -15,6 +16,16 @@ browser.runtime.sendMessage({
 	// initialize menu items
 	if (oPrefs.toBlock.includes('image/webp')) document.querySelector('#webp > span').textContent = '☑';
 	if (oPrefs.toBlock.includes('image/avif')) document.querySelector('#avif > span').textContent = '☑';
+	// v0.8 exempt site item
+	browser.tabs.query({active:true,currentWindow:true}).then(function(tabs){
+		var hostname = new URL(tabs[0].url).hostname;
+		if (hostname){
+			document.getElementById('hostname').textContent = hostname;
+			if (oPrefs.exemptSites.includes(hostname)) document.querySelector('#site > span').textContent = '☑';
+		} else {
+			document.getElementById('site').style.display = 'none';
+		}
+	});
 }).catch((err) => {
 	console.log('Problem getting oPrefs: ' + err.message);
 });
@@ -46,6 +57,22 @@ function menuClick(evt){
 		} else {
 			oPrefs.toBlock.push('image/avif');
 			document.querySelector('#avif > span').textContent = '☑';
+		}
+		// Send new oPrefs off to the background script
+		updatePref();
+		return;
+	}
+	// v0.8 exemptSites
+	if (tgt.id == 'site' || tgt.parentNode.id == 'site'){
+		var hostname = document.getElementById('hostname').textContent;
+		// Update oPrefs and display of menus
+		var indx = oPrefs.exemptSites.indexOf(hostname);
+		if (indx > -1){ //remove hostname
+			oPrefs.exemptSites.splice(indx, 1);
+			document.querySelector('#site > span').textContent = '☐';
+		} else {
+			oPrefs.exemptSites.push(hostname);
+			document.querySelector('#site > span').textContent = '☑';
 		}
 		// Send new oPrefs off to the background script
 		updatePref();
