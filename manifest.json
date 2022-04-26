@@ -1,7 +1,7 @@
 {
 	"name": "Don't Accept image/webp",
 	"description": "Strip image/webp from Accept: headers, which should discourage servers from replacing JPEG and PNG images with WebP images.",
-	"version": "0.8.1",
+	"version": "0.8.2",
 	"manifest_version": 2,
 	"applications":{
 		"gecko": {

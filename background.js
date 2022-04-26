@@ -5,7 +5,7 @@
   v0.6 - pesky commas...
   v0.7 - new menu; option to also not accept AVIF
   v0.8 - ability to exempt a site and embedded/linked files
-  v0.8.1 - bug fix
+  v0.8.1, v0.8.2 - bug fix
 */
 
 let nowlistening; // used for toggling listener
@@ -48,7 +48,7 @@ function cleanAccept(details) {
 			var docUrl = new URL(details.documentUrl);
 			if (oPrefs.exemptSites.includes(docUrl.hostname)) return { requestHeaders: details.requestHeaders };
 		} 
-		if (details.origUrl != null && details.origUrl != undefined){
+		if (details.originUrl != null && details.originUrl != undefined){
 			var origUrl = new URL(details.originUrl);
 			if (oPrefs.exemptSites.includes(origUrl.hostname)) return { requestHeaders: details.requestHeaders };
 		}
