@@ -1,9 +1,9 @@
 {
 	"name": "Don't Accept image/webp",
 	"description": "Strip image/webp from Accept: headers, which should discourage servers from replacing JPEG and PNG images with WebP images.",
-	"version": "0.8.2",
+	"version": "0.9",
 	"manifest_version": 2,
-	"applications":{
+	"browser_specific_settings":{
 		"gecko": {
 			"id": "dont-accept-webp@jeffersonscher.com",
 			"strict_min_version": "60.0"
@@ -19,7 +19,8 @@
 		"activeTab",
 		"webRequest",
 		"webRequestBlocking",
-		"storage"
+		"storage",
+		"management"
     ],
 	"browser_action": {
 		"browser_style": true,
